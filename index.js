@@ -14,7 +14,9 @@ app.use(bodyParser.json());
 
 app.post("/send",new_message_query,hit_db,end);
 
-app.get("/chat",chat_query,hit_db,end);
+app.get("/chat/list",chat_list_query,hit_db,end);
+
+app.get("/chat/last",chat_last_query,hit_db,end);
 
 function end(req,res){
   res.end;
@@ -27,14 +29,20 @@ function new_message_query(req,res,next){
   next(query);
 }
 
-function chat_query(req,res,next){
+function chat_list_query(req,res,next){
   currentchatlocation = id - 10;
   var query = "SELECT id,name, message FROM kgt_chat";
   if(id > 10){
     query = query + " WHERE id > " + currentchatlocation
   }
   next(query);
-  console.log("get");
+  console.log("get-list");
+}
+
+function chat_last_query(req,res,next){
+  var query = "SELECT id,name, message FROM kgt_chat WHERE id = " + id;
+  next(query);
+  console.log("get-last");
 }
 
 function hit_db(qry,req,res,next){
