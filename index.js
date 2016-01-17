@@ -8,7 +8,7 @@ var bodyParser = require("body-parser");
 var pg = require("pg");
 var conString = process.env.DATABASE_URL || "postgres://localhost:5432/jonathan";
 
-var id = 11;
+var id = 1;
 
 app.use(bodyParser.json());
 
