@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 
 app.post("/send",new_message_query,hit_db,end);
 
-app.get("/chat/list",chat_list_query,hit_db,end);
+//app.get("/chat/list",chat_list_query,hit_db,end);
 
 app.get("/chat/last",chat_last_query,hit_db,end);
 
