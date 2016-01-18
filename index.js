@@ -8,7 +8,25 @@ var bodyParser = require("body-parser");
 var pg = require("pg");
 var conString = process.env.DATABASE_URL || "postgres://localhost:5432/jonathan";
 
-var id = 1;
+var id;
+var id_query = "SELECT MAX(id) FROM kgt_chat";
+function id_updater(qry){
+  pg.connect(conString, function(err, client, done) {
+    if(err) {
+      return console.error("error fetching client from pool", err);
+    }
+    client.query(qry,function(err, result) {
+      done();
+      if(err) {
+        return console.error("error running query", err);
+      }
+      id = result.rows[0].max;
+      console.log("Server started with ID: " + id);
+    });
+  });
+}
+
+id_updater(id_query);
 
 app.use(bodyParser.json());
 
@@ -24,8 +42,8 @@ function end(req,res){
 
 function new_message_query(req,res,next){
   console.dir(req.body);
-  var query = "INSERT INTO kgt_chat VALUES(" + id + ", '" + req.body.name + "' , '" + req.body.message + "')";
   id++;
+  var query = "INSERT INTO kgt_chat VALUES(" + id + ", '" + req.body.name + "' , '" + req.body.message + "')";
   next(query);
 }
 
@@ -55,7 +73,7 @@ function hit_db(qry,req,res,next){
       if(err) {
         return console.error("error running query", err);
       }
-      res.json(result.rows);
+      res.json({'chat' : result.rows});
     });
   });
   next();
