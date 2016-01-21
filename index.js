@@ -21,7 +21,7 @@ function id_updater(qry){
         return console.error("error running query", err);
       }
       id = result.rows[0].max;
-      console.log("Server started with ID: " + id);
+      console.log("Server started, ID seet to: " + id);
     });
   });
 }
